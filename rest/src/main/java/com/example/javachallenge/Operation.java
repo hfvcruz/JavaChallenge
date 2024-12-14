@@ -16,9 +16,9 @@ public class Operation {
 	private BigDecimal inputB;
 	private BigDecimal result;
 
-    Operation() {}
+    public Operation() {}
 
-	Operation(BigDecimal inputA, BigDecimal inputB) {
+	public Operation(BigDecimal inputA, BigDecimal inputB) {
 
 		this.inputA = inputA;
 		this.inputB = inputB;
