@@ -29,20 +29,39 @@ public class CalculatorAPI {
         request.setOperationType(OperationType.SUM);
         return calculatorRequestProducer.requestCalculation(request);
     }
+   
+    @GetMapping("/subtraction")
+    public CalculatorReplyDTO subtraction(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+        CalculatorRequestDTO request = new CalculatorRequestDTO();
+        request.setInputA(a);
+        request.setInputB(b);
+        request.setOperationType(OperationType.SUBTRACTION);
+        return calculatorRequestProducer.requestCalculation(request);
     }
 
-    // @GetMapping("/sum")
-    // EntityModel<Operation> sum(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
-    //     Operation op = new Operation(a, b);
-    //     BigDecimal result = a.add(b);
-    //     op.setResult(result);
-    //     return EntityModel.of(op, linkTo(methodOn(CalculatorController.class).sum(a, b)).withSelfRel());
-    // }
+    @GetMapping("/multiplication")
+    public CalculatorReplyDTO multiplication (@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+        CalculatorRequestDTO request = new CalculatorRequestDTO();
+        request.setInputA(a);
+        request.setInputB(b);
+        request.setOperationType(OperationType.MULTIPLICATION);
+        return calculatorRequestProducer.requestCalculation(request);
+    }
 
-    // @GetMapping("/sum")
-    // BigDecimal sum(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
-    //     return a.add(b);
-    // }
-    
+    @GetMapping("/division")
+    public ResponseEntity<CalculatorReplyDTO> division(@RequestParam BigDecimal a, @RequestParam BigDecimal b) throws Exception {
+        if(b.equals(new BigDecimal(0))) 
+        {
+            // Cannot divide by 0.
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 
+        } else {
+            CalculatorRequestDTO request = new CalculatorRequestDTO();
+            request.setInputA(a);
+            request.setInputB(b);
+            request.setOperationType(OperationType.DIVISION);
+            var result = calculatorRequestProducer.requestCalculation(request);
+            return ResponseEntity.ok(result);
+        }
+    }
 }
