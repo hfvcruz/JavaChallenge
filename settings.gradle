@@ -1,3 +1,4 @@
 rootProject.name = 'JavaChallenge'
 include 'rest'
 include 'calculator'
+include 'model'

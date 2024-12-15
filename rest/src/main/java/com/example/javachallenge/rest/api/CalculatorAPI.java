@@ -1,4 +1,4 @@
-package com.example.javachallenge.api;
+package com.example.javachallenge.rest.api;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.javachallenge.Operation;
-import com.example.javachallenge.dto.CalculatorDTO;
-import com.example.javachallenge.service.CalculatorService;
+import com.example.javachallenge.rest.Operation;
+import com.example.javachallenge.model.CalculatorDTO;
+import com.example.javachallenge.model.OperationType;
+import com.example.javachallenge.rest.service.CalculatorService;
 
 @RestController
 public class CalculatorAPI {
@@ -33,10 +34,11 @@ public class CalculatorAPI {
     }
 
     @GetMapping("/sum")
-    public String sum(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
+    public CalculatorDTO sum(@RequestParam BigDecimal a, @RequestParam BigDecimal b) {
         CalculatorDTO cal = new CalculatorDTO();
         cal.setInputA(a);
         cal.setInputB(b);
+        cal.setOperationType(OperationType.SUM);
         return calculatorService.requestCalculation(cal);
     }
 
