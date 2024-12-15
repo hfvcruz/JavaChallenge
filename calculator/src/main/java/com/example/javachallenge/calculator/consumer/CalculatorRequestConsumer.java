@@ -3,27 +3,29 @@ package com.example.javachallenge.calculator.consumer;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import com.example.javachallenge.model.CalculatorDTO;
+import com.example.javachallenge.calculator.Calculator;
+import com.example.javachallenge.model.CalculatorRequestDTO;
+import com.example.javachallenge.model.CalculatorReplyDTO;
 
 @Component  
 public class CalculatorRequestConsumer {
 
-    @KafkaListener(topics = "${kafka.topic.request-topic}")
+    @KafkaListener(topics = "${kafka.topic.request-topic}",
+                   groupId = "calculator-request-consumer")
     @SendTo
-    public CalculatorDTO consume(CalculatorDTO message) throws InterruptedException {
-        System.out.println("===== MENSAGEM RECEBIDA === ");
-        System.out.println("A=" + message.getInputA().toString() + 
-        " B=" + message.getInputB().toString() + 
-        " OperationType=" + message.getOperationType().toString());
+    public CalculatorReplyDTO consume(CalculatorRequestDTO request) throws InterruptedException {
+        System.out.println("===== CALCULATION REQUEST RECEIVED === ");
+        System.out.println("A=" + request.getInputA().toString() + 
+        " B=" + request.getInputB().toString() + 
+        " OperationType=" + request.getOperationType().toString());
 
-        message.performCalculation();
+        var result = Calculator.performCalculation(request.getInputA(),  request.getInputB(), request.getOperationType());
 
-        System.out.println("Result=" + message.getResult().toString());
+        System.out.println("Result=" + result.toString());
 
-        // int sum = request.getFirstNumber() + request.getSecondNumber();
-		//  request.setAdditionalProperty("sum", sum);
-		return message;
+        var reply = new CalculatorReplyDTO();
+        reply.setResult(result);
+		return reply;
     }
 }
